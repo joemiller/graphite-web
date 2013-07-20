@@ -53,11 +53,12 @@ def index_json(request):
   jsonp = request.REQUEST.get('jsonp', False)
   matches = []
 
-  for root, dirs, files in os.walk(settings.WHISPER_DIR):
-    root = root.replace(settings.WHISPER_DIR, '')
-    for basename in files:
-      if fnmatch.fnmatch(basename, '*.wsp'):
-        matches.append(os.path.join(root, basename))
+  for whisper_dir in settings.WHISPER_DIRS:
+    for root, dirs, files in os.walk(whisper_dir):
+      root = root.replace(whisper_dir, '')
+      for basename in files:
+        if fnmatch.fnmatch(basename, '*.wsp'):
+          matches.append(os.path.join(root, basename))
 
   for match in do_walk_rrd_dirs(settings.RRD_DIR):
     matches.append(match)
