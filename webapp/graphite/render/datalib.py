@@ -227,7 +227,10 @@ def fetchData(requestContext, pathExpr):
 
   for dbFile in store.find(pathExpr):
     log.metric_access(dbFile.metric_path)
-    dbResults = dbFile.fetch( timestamp(startTime), timestamp(endTime), timestamp(now))
+    # @TODO(joe): temp workaround to issues between graphite-web and whisper 0.9.x branches
+    #   https://github.com/graphite-project/graphite-web/issues/597
+    #dbResults = dbFile.fetch( timestamp(startTime), timestamp(endTime), timestamp(now))
+    dbResults = dbFile.fetch( timestamp(startTime), timestamp(endTime))
     results = dbResults
 
     if dbFile.isLocal():

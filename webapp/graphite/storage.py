@@ -305,7 +305,10 @@ class WhisperFile(Leaf):
     return [ (start, end) ]
 
   def fetch(self, startTime, endTime, now=None):
-    return whisper.fetch(self.fs_path, startTime, endTime, now)
+    #return whisper.fetch(self.fs_path, startTime, endTime, now)
+    # @TODO(joe): temp workaround to issues between graphite-web and whisper 0.9.x branches
+    #   https://github.com/graphite-project/graphite-web/issues/597
+    return whisper.fetch(self.fs_path, startTime, endTime)
 
   @property
   def context(self):
@@ -342,7 +345,10 @@ class GzippedWhisperFile(WhisperFile):
 
     fh = gzip.GzipFile(self.fs_path, 'rb')
     try:
-      return whisper.file_fetch(fh, startTime, endTime, now)
+      # @TODO(joe): temp workaround to issues between graphite-web and whisper 0.9.x branches
+      #   https://github.com/graphite-project/graphite-web/issues/597
+      #return whisper.file_fetch(fh, startTime, endTime, now)
+      return whisper.file_fetch(fh, startTime, endTime)
     finally:
       fh.close()
 
