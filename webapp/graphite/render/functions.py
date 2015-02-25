@@ -598,6 +598,30 @@ def scale(requestContext, seriesList, factor):
       series[i] = safeMul(value,factor)
   return seriesList
 
+def divideByConstant(requestContext, dividend, divisorSeriesList):
+  """
+  Takes a constant value to use as the dividend and one metric or a wildcard seriesList
+  to use as the divisor.
+
+  Useful for calculating a new metric such as a max rate given a time series of latency
+  values. For example, given a timeseries of API response latencies measured in `ms` you
+  can compute a current maximum request rate by dividing 1000ms by the latency as measured
+  in `ms`.
+
+  Example:
+
+  .. code-block:: none
+
+    &target=divideByConstant(1000,api.request.latency_ms)
+
+  """
+  for series in divisorSeriesList:
+    series.name = "divideByConstant(%g,%s)" % (float(dividend), series.name)
+    series.pathExpression = series.name
+    for i,value in enumerate(series):
+        series[i] = safeDiv(dividend, value)
+  return divisorSeriesList
+
 def scaleToSeconds(requestContext, seriesList, seconds):
   """
   Takes one metric or a wildcard seriesList and returns "value per seconds" where
@@ -2726,6 +2750,7 @@ SeriesFunctions = {
 
   # Transform functions
   'scale' : scale,
+  'divideByConstant': divideByConstant,
   'scaleToSeconds' : scaleToSeconds,
   'offset' : offset,
   'derivative' : derivative,
