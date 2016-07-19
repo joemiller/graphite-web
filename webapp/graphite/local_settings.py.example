@@ -96,7 +96,7 @@
 # NOTE: If any directory is unreadable in STANDARD_DIRS it will break metric browsing
 #
 #CERES_DIR = '/opt/graphite/storage/ceres'
-#WHISPER_DIR = '/opt/graphite/storage/whisper'
+#WHISPER_DIRS = ['/opt/graphite/storage/whisper']
 #RRD_DIR = '/opt/graphite/storage/rrd'
 #
 # Data directories using the "Standard" metrics finder (i.e. not Ceres)
